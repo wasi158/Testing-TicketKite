@@ -1,5 +1,6 @@
-import { APIConfig } from '@/config/api-config';
 import { Show } from '@/type/woocommerce/Shows';
+
+// Configuration constants for WooCommerce API
 
 interface FetchOptions {
 	status?: string;
@@ -8,24 +9,16 @@ interface FetchOptions {
 
 export async function fetchWooCommerceData<T>(
 	route: 'products' | 'all-shows' | 'all-hotels' | 'all-tours',
-	options: FetchOptions = {}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	_options: FetchOptions = {}
 ): Promise<T[]> {
-	const { status = 'publish', perPage = 20 } = options;
-
 	try {
-		const { wooCommerce } = APIConfig;
-
 		// Construct URL with query parameters
-		const params = new URLSearchParams({
-			consumer_key: wooCommerce.consumer_key,
-			consumer_secret: wooCommerce.consumer_secret,
-			status,
-			per_page: perPage.toString(),
-		});
 
-		const url = `${wooCommerce.baseURL}/${route}?${params.toString()}`;
+		// const url = `${wooCommerceConfig.baseURL}/${route}?${params.toString()}`;
+		const url = `https://ticketkite.com/wp-json/wc/v3/products?consumer_key=ck_798f9d97a8356355afd3d0708b16342949d241d3&consumer_secret=cs_d358bad4d1718a40d8b5c940b3513b8929cdad33`;
 
-		// Fetch with improved error handling
+		// Fetch with error handling
 		const response = await fetch(url, {
 			method: 'GET',
 			headers: {
@@ -33,7 +26,7 @@ export async function fetchWooCommerceData<T>(
 			},
 		});
 
-		// Enhanced error handling
+		// Handle errors
 		if (!response.ok) {
 			const errorBody = await response.text();
 			throw new Error(
@@ -42,17 +35,14 @@ export async function fetchWooCommerceData<T>(
 		}
 
 		const data = await response.json();
-
 		return data;
 	} catch (error: unknown) {
 		console.error(`Error fetching data from route ${route}:`, error);
 
-		// Check if error is an instance of Error
 		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 
-		// If the error is not an instance of Error, throw a generic error
 		throw new Error('An unknown error occurred.');
 	}
 }
