@@ -29,7 +29,6 @@ export async function fetchWooCommerceData<T>(
 		const response = await fetch(url, {
 			method: 'GET',
 			headers: {
-				Accept: 'application/json',
 				'Content-Type': 'application/json',
 			},
 		});
@@ -42,18 +41,7 @@ export async function fetchWooCommerceData<T>(
 			);
 		}
 
-		// Validate and parse JSON
-		const contentType = response.headers.get('content-type');
-		if (!contentType || !contentType.includes('application/json')) {
-			throw new Error('Response is not JSON');
-		}
-
 		const data = await response.json();
-
-		// Additional validation
-		if (!Array.isArray(data)) {
-			throw new Error('Expected an array of items');
-		}
 
 		return data;
 	} catch (error: unknown) {
@@ -61,17 +49,7 @@ export async function fetchWooCommerceData<T>(
 
 		// Check if error is an instance of Error
 		if (error instanceof Error) {
-			// Handle specific HTTP error cases (500, 404, etc.)
-			if (error.message.includes('500')) {
-				throw new Error('Server error. Please try again later.');
-			}
-
-			if (error.message.includes('404')) {
-				throw new Error('Resource not found.');
-			}
-
-			// General fallback for unknown errors
-			throw new Error('An unexpected error occurred.');
+			throw new Error(error.message);
 		}
 
 		// If the error is not an instance of Error, throw a generic error

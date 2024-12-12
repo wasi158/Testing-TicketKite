@@ -5,11 +5,11 @@ import { Show } from '@/type/woocommerce/Shows';
 interface CardProps {
 	image: string;
 	title: string;
-	description: string;
+
 	price: string;
 }
 
-const Card: React.FC<CardProps> = ({ image, title, description, price }) => (
+const Card: React.FC<CardProps> = ({ image, title, price }) => (
 	<div className='bg-black rounded-2xl text-white overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer h-96'>
 		<div className='relative h-48'>
 			<Image
@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({ image, title, description, price }) => (
 			<div className='flex justify-between items-start h-28'>
 				<p
 					className='text-sm text-gray-400 line-clamp-3 flex-1 mr-2'
-					dangerouslySetInnerHTML={{ __html: description }}
+					// dangerouslySetInnerHTML={{ __html: description }}
 				></p>
 				<div className='text-right'>
 					<span className='text-sm'>From</span>
@@ -50,7 +50,6 @@ const FeaturedShows: React.FC<Props> = ({ shows }: Props) => {
 						key={index}
 						image={show?.images[0]?.src || '/placeholder.jpg'}
 						title={show?.images[0]?.name || 'Show Title'}
-						description={show.description}
 						price={show.price.toString()}
 					/>
 				))}

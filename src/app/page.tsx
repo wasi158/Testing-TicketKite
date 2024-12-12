@@ -1,13 +1,13 @@
-import React from 'react';
-
-import FeaturedShows from './_components/featuredshows';
+import React, { Suspense } from 'react';
 
 import { getShows } from '@/lib/woocommerce/shows';
+import FeaturedShows from './homepage/_components/featuredshows';
 
 export const revalidate = 300;
 
 const page = async () => {
 	const shows = await getShows('products');
+	console.log({ shows });
 	return (
 		<div className='w-full bg-[#141414] text-white'>
 			<div
@@ -29,7 +29,9 @@ const page = async () => {
 					Adventure, Laughter, and Memories!
 				</p>
 			</div>
-			<FeaturedShows shows={shows} />
+			<Suspense>
+				<FeaturedShows shows={shows} />
+			</Suspense>
 		</div>
 	);
 };
